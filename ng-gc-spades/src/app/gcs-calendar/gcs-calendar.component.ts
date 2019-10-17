@@ -6,8 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./gcs-calendar.component.scss']
 })
 export class GcsCalendarComponent implements OnInit {
-
   constructor() { }
+  calendarArray:any;
 
   ngOnInit() {
     this.generateCalendar(new Date());
@@ -24,7 +24,9 @@ export class GcsCalendarComponent implements OnInit {
         let remainder = firstWeekDay;
           for(remainder;remainder > 1; remainder--){
             let dateToPush = new Date(new Date(firstDay.getTime()).setDate(firstDay.getDate() - (remainder - 1))).getDate();
-            days[0].push( [dateToPush, 'previous']);
+            days[0].push( {
+              'day':dateToPush, 
+              'status':'current'});
           }
       }
       let remainder = firstWeekDay;
@@ -34,17 +36,21 @@ export class GcsCalendarComponent implements OnInit {
         if(remainder == 7){
           dateBackup = new Date(new Date(firstDay.getTime()).setDate(firstDay.getDate() + (remainder - firstWeekDay)));
         }
-        days[0].push( [dateToPush, 'current']);
+        days[0].push( {
+            'day':dateToPush, 
+            'status':'current'});
       }
       let canStillGenerate: boolean = true;
-      let index: number = 1;
+      let index: number = 0;
       while(canStillGenerate){
-        let dayToPush = new Date(dateBackup.setDate(dateBackup.getDate() + 1)).getDate();
-        if(dayToPush != 1){
+        let dateToPush = new Date(dateBackup.setDate(dateBackup.getDate() + 1)).getDate();
+        if(dateToPush != 1){
           if(!days[Math.floor(index / 7) + 1]){
             days[Math.floor(index / 7) + 1] = [];
           }
-          days[Math.floor(index / 7) + 1 ].push([dayToPush, 'current'])
+          days[Math.floor(index / 7) + 1 ].push({
+            'day':dateToPush, 
+            'status':'current'})
         }else{
           canStillGenerate = false;
         }
@@ -53,8 +59,8 @@ export class GcsCalendarComponent implements OnInit {
       remainder = days.length;
 
       generating = false;
+      this.calendarArray = days;
     }
-    console.log(days);
     
   }
 }

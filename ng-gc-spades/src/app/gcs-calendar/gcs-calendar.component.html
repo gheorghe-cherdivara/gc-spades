@@ -1,3 +1,5 @@
 <table>
-    <tr></tr>
+    <tr *ngFor="let row in calendarArray ">
+        <td *ngFor="let column in row" [class]="column.status">{{column.day}}</td>
+    </tr>
 </table>
